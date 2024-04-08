@@ -77,7 +77,7 @@ class Find4g:
                 self.base_class.click(RADIO_SUNDAY_HOLIDAY)
             elif date.weekday() == 5:
                 self.base_class.click(RADIO_SATURDAY)
-            elif date.weekday() < 5:
+            else:
                 self.base_class.click(RADIO_WEEKDAY)
             select_weekday = weekday_names[date.weekday()]
             self.logger.info(f"Radio button selected: {select_weekday}")

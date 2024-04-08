@@ -43,10 +43,10 @@ class ExtractDataAndGetTimes:
                 content = {
                     # Find all th and insert text to row, strip.True removes
                     # any whitespaces from text
-                    DocumentsAndPaths.excel_column_hours: row.find('th').get_text(strip=True),
+                    DocumentsAndPaths.column_hours: row.find('th').get_text(strip=True),
                     # Adding all 'a' elements to a list as text removing all
                     # the whitespaces from text
-                    DocumentsAndPaths.excel_column_minutes: list(
+                    DocumentsAndPaths.column_minutes: list(
                         map(lambda a: a.get_text(strip=True), row.find_all('a')))
                 }
                 time_tables.append(content)

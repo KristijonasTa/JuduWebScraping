@@ -15,7 +15,7 @@ def main():
         default="info",
         help=(
             "Provide logging level. "
-            "Example --log debug', default='info'"),
+            "Example -log 'debug', default='info'"),
     )
     args = parser.parse_args()
 
