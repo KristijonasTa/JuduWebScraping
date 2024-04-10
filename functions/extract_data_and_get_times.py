@@ -80,7 +80,6 @@ class ExtractDataAndGetTimes:
         """Create timetable lists"""
         # Takes current hour
         current_hour = int(datetime.datetime.now().strftime('%H'))
-        current_hour = 2
         if current_hour == 24:
             all_hours = [23, 24, 1]  # Midnight represented as 24
         else:
