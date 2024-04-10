@@ -123,11 +123,13 @@ celerybeat.pid
 # Environments
 .env
 .venv
+.judu-env
 env/
 venv/
 ENV/
 env.bak/
 venv.bak/
+judu-env/
 
 # Spyder project settings
 .spyderproject
