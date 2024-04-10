@@ -14,10 +14,6 @@ class BaseClass:
         """Find element"""
         return self.driver.find_element(*locator)
 
-    def find_elements(self, *locator):
-        """Find elements"""
-        return self.find_elements(*locator)
-
     def click(self, locator):
         """Click element"""
         self.find_element(*locator).click()

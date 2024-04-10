@@ -1,6 +1,7 @@
 """Extract data from web"""
 import datetime
 import json
+from json import JSONDecodeError
 
 from bs4 import BeautifulSoup
 import pandas
@@ -18,16 +19,6 @@ class ExtractDataAndGetTimes:
         self.driver = driver
         self.base_class = BaseClass(self.driver)
         self.logger = logger
-
-    def extract_data(self):
-        """Full steps to extract data"""
-        time_sheet = self.scrap_data()
-        self.insert_data_to_mongodb(time_sheet, DocumentsAndPaths.mongodb_collection)
-        self.insert_data_to_excel(time_sheet, DocumentsAndPaths.file_path_excel)
-        hours_time_tables = self.get_timetables_list()
-        duplicate_hours = self.duplicate_hours(hours_time_tables)
-        self.format_to_json_if_duplicates(duplicate_hours,
-                                          hours_time_tables, DocumentsAndPaths.file_path_json)
 
     def scrap_data(self):
         """Insert data to DataFrame"""
@@ -89,8 +80,10 @@ class ExtractDataAndGetTimes:
         """Create timetable lists"""
         # Takes current hour
         current_hour = int(datetime.datetime.now().strftime('%H'))
-        # Set needed hours to a list -1 0 +1
-        all_hours = [current_hour - 1, current_hour, current_hour + 1]
+        if current_hour == 24:
+            all_hours = [23, 24, 1]  # Midnight represented as 24
+        else:
+            all_hours = [current_hour - 1, current_hour, current_hour + 1]
 
         # Connect to mongoDB
         # pylint: disable=line-too-long
@@ -172,11 +165,24 @@ class ExtractDataAndGetTimes:
                     result_json["Time_table"] = {}
                 result_json["Time_table"][f"{hour} hours"] = bus_schedule
 
-        if result_json:
-            with open(path_to_json, "w", encoding='utf-8') as json_file:
-                json.dump(result_json, json_file, indent=4)
-            self.logger.info("JSON was created")
-        else:
-            with open(path_to_json, "w", encoding='utf-8') as json_file:
-                json.dump({"Time_tables": result_json}, json_file, indent=4)
-            self.logger.info("No times found, JSON is empty")
+        try:
+            if result_json:
+                with open(path_to_json, "w", encoding='utf-8') as json_file:
+                    json.dump(result_json, json_file, indent=4)
+                self.logger.info("JSON was created")
+            else:
+                with open(path_to_json, "w", encoding='utf-8') as json_file:
+                    json.dump({"Time_tables": result_json}, json_file, indent=4)
+                self.logger.info("No times found, JSON is empty")
+        except JSONDecodeError as e:
+            self.logger.error(f"Create JSON failed for file: {json_file}, Error {e}")
+
+    def extract_data(self):
+        """Full steps to extract data"""
+        time_sheet = self.scrap_data()
+        self.insert_data_to_mongodb(time_sheet, DocumentsAndPaths.mongodb_collection)
+        self.insert_data_to_excel(time_sheet, DocumentsAndPaths.file_path_excel)
+        hours_time_tables = self.get_timetables_list()
+        duplicate_hours = self.duplicate_hours(hours_time_tables)
+        self.format_to_json_if_duplicates(duplicate_hours,
+                                          hours_time_tables, DocumentsAndPaths.file_path_json)
