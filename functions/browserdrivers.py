@@ -3,7 +3,7 @@ from selenium import webdriver
 from utils.document_and_names import DocumentsAndPaths
 
 
-class Drivers:
+class BrowserDrivers:
     """Initialize drivers"""
     def __init__(self, browser, logger):
         self.browser = browser

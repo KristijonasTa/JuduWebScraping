@@ -1,3 +1,36 @@
 {
-    "Time_tables": {}
+    "Time_table": {
+        "16 hours": {
+            "Bus-1 at minute": "02",
+            "Bus-2 at minute": "10",
+            "Bus-3 at minute": "18",
+            "Bus-4 at minute": "25",
+            "Bus-5 at minute": "32",
+            "Bus-6 at minute": "38",
+            "Bus-7 at minute": "44",
+            "Bus-8 at minute": "50",
+            "Bus-9 at minute": "56"
+        },
+        "17 hours": {
+            "Bus-1 at minute": "02",
+            "Bus-2 at minute": "08",
+            "Bus-3 at minute": "14",
+            "Bus-4 at minute": "20",
+            "Bus-5 at minute": "26",
+            "Bus-6 at minute": "32",
+            "Bus-7 at minute": "39",
+            "Bus-8 at minute": "47",
+            "Bus-9 at minute": "56"
+        },
+        "18 hours": {
+            "Bus-1 at minute": "02",
+            "Bus-2 at minute": "08",
+            "Bus-3 at minute": "15",
+            "Bus-4 at minute": "24",
+            "Bus-5 at minute": "31",
+            "Bus-6 at minute": "39",
+            "Bus-7 at minute": "47",
+            "Bus-8 at minute": "56"
+        }
+    }
 }
