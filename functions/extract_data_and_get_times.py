@@ -53,7 +53,7 @@ class ExtractDataAndGetTimes:
         # Creates/ overwrites excel and inserts data to excel
         # naming sheet 'Timetables', index false remove index numbers
         try:
-            with pandas.ExcelWriter(file_path, engine='xlsxwriter', ) as writer:
+            with pandas.ExcelWriter(file_path, engine='xlsxwriter') as writer:
                 df.to_excel(writer, index=False, sheet_name='Timetables')
         except FileNotFoundError as e:
             self.logger.error(f"Excel create failed {e}")
@@ -80,8 +80,8 @@ class ExtractDataAndGetTimes:
         """Create timetable lists"""
         # Takes current hour
         current_hour = int(datetime.datetime.now().strftime('%H'))
-        if current_hour == 24:
-            all_hours = [23, 24, 1]  # Midnight represented as 24
+        if current_hour == 0:
+            all_hours = [23, 0, 1]
         else:
             all_hours = [current_hour - 1, current_hour, current_hour + 1]
 
@@ -164,17 +164,16 @@ class ExtractDataAndGetTimes:
                     result_json["Time_table"] = {}
                 result_json["Time_table"][f"{hour} hours"] = bus_schedule
 
-        try:
-            if result_json:
-                with open(path_to_json, "w", encoding='utf-8') as json_file:
+        with open(path_to_json, "w", encoding='utf-8') as json_file:
+            try:
+                if result_json:
                     json.dump(result_json, json_file, indent=4)
-                self.logger.info("JSON was created")
-            else:
-                with open(path_to_json, "w", encoding='utf-8') as json_file:
+                    self.logger.info("JSON was created")
+                else:
                     json.dump({"Time_tables": result_json}, json_file, indent=4)
-                self.logger.info("No times found, JSON is empty")
-        except JSONDecodeError as e:
-            self.logger.error(f"Create JSON failed for file: {json_file}, Error {e}")
+                    self.logger.info("No times found, JSON is empty")
+            except JSONDecodeError as e:
+                self.logger.error(f"Create JSON failed for file: {json_file}, Error {e}")
 
     def extract_data(self):
         """Full steps to extract data"""
